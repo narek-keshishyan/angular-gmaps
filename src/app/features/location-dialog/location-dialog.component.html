@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>{{location?.name}}</h2>
+
+<loading></loading>
+
+<messages></messages>
+
+<mat-dialog-content [formGroup]="form">
+
+  <mat-form-field>
+
+    <input matInput
+           placeholder="Location Name"
+           formControlName="name">
+
+  </mat-form-field>
+
+  <mat-form-field>
+
+    <input matInput
+           placeholder="Latitude"
+           formControlName="lat">
+
+  </mat-form-field>
+
+  <mat-form-field>
+
+    <input matInput
+           placeholder="Longitude"
+           formControlName="lng">
+
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+  <button mat-raised-button
+          (click)="close()">
+    Close
+  </button>
+
+  <button mat-raised-button color="primary" #saveButton (click)="save()">
+    Save
+  </button>
+
+</mat-dialog-actions>
+
+

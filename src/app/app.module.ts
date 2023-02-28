@@ -29,6 +29,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MapComponent } from './pages/map/map.component';
 import { LocationsComponent } from './pages/locations/locations.component';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LocationDialogComponent } from './features/location-dialog/location-dialog.component';
 
 @NgModule({
   declarations: [
@@ -36,11 +38,13 @@ import { AppRoutingModule } from './app-routing.module';
     LoadingComponent,
     MessagesComponent,
     MapComponent,
-    LocationsComponent
+    LocationsComponent,
+    LocationDialogComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     GoogleMapsModule,
     HttpClientModule,
@@ -56,11 +60,13 @@ import { AppRoutingModule } from './app-routing.module';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatPaginatorModule,
     MatSortModule,
     MatProgressSpinnerModule,
     MatDialogModule,
     MatSelectModule,
     MatDatepickerModule,
+    MatTableModule,
     ReactiveFormsModule
   ],
   providers: [
