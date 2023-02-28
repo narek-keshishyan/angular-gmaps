@@ -1,24 +1,12 @@
-<div class="container">
-  <div class="side-panel" [style.width]="showSidePanel ? '30%' : '0%'" (click)="toggleSidePanel()">
-    <h2>{{selectedMarker?.lng}}</h2>
-    <p>{{selectedMarker?.lat}}</p>
-  </div>
-  <button class="toggle-button" (click)="toggleSidePanel()">
-    {{showSidePanel ? '<' : '>'}}
-  </button>
-  <div class="map-container">
-    <div *ngIf="apiLoaded | async">
-      <google-map height="100vh"
-                  width="100%"
-                  [center]="center"
-                  [zoom]="zoom"
-                  (mapClick)="addMarker($event)">
-        <map-marker #marker="mapMarker"
-                    *ngFor="let markerPosition of markerPositions"
-                    [position]="markerPosition"
-                    (mapClick)="openInfoWindow(marker, markerPosition)"></map-marker>
-        <map-info-window>{{infoContent}}</map-info-window>
-      </google-map>
-    </div>
-  </div>
-</div>
+<mat-toolbar color="primary">
+  <span>LocationApp</span>
+  <span class="spacer"></span>
+  <a mat-button routerLink="/">Map</a>
+  <a mat-button routerLink="/locations">Locations</a>
+</mat-toolbar>
+
+<messages></messages>
+
+<loading></loading>
+
+<router-outlet></router-outlet>
