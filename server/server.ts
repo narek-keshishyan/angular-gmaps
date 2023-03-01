@@ -1,6 +1,6 @@
 import * as express from 'express';
 import {Application} from "express";
-import { getAllLocations, getLocationById } from "./get-locations.route";
+import { getLocationById, getLocationsByParams } from "./get-locations.route";
 import { updateLocation } from './update-location.route';
 import { createLocation } from './create-location.route';
 
@@ -16,7 +16,7 @@ const PORT = 8080;
 
 app.use(cors({origin: true}));
 
-app.route('/api/locations').get(getAllLocations);
+app.route('/api/locations').get(getLocationsByParams);
 
 app.route('/api/locations/:id').get(getLocationById);
 

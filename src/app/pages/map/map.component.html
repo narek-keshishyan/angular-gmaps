@@ -1,24 +1,23 @@
 <div class="container">
   <div class="side-panel" [style.width]="showSidePanel ? '30%' : '0%'" (click)="toggleSidePanel()" (transitionend)="onTransitionEnd()">
-    <ng-container *ngIf="showContent">
-      <h2>{{selectedMarker?.name}}</h2>
-      <p>Latitude: {{selectedMarker?.coordinates[0]}}</p>
-      <p>Longitude: {{selectedMarker?.coordinates[1]}}</p>
-    </ng-container>
+    <div class="side-panel-content" *ngIf="showContent">
+      <h2>{{selectedMarker.name}}</h2>
+      <p>Latitude: {{selectedMarker.lat}}</p>
+      <p>Longitude: {{selectedMarker.lng}}</p>
+    </div>
   </div>
   <button class="toggle-button" (click)="toggleSidePanel()">
-    {{showSidePanel ? '<' : '>'}}
+    <mat-icon>{{ showSidePanel ? 'chevron_left' : 'chevron_right' }}</mat-icon>
   </button>
   <div class="map-container">
-    <div *ngIf="apiLoaded | async">
-      <google-map height="100vh"
+    <div *ngIf="apiLoaded$ | async">
+      <google-map height="95vh"
                   width="100%"
                   [center]="center"
-                  [zoom]="zoom"
-                  (mapClick)="addMarker($event)">
+                  [zoom]="zoom">
         <map-marker #marker="mapMarker"
-                    *ngFor="let location of locations$ | async"
-                    [position]="{lat: location.coordinates[0], lng: location.coordinates[1]}"
+                    *ngFor="let location of (locations$ | async)?.results"
+                    [position]="{lat: location.lat, lng: location.lng}"
                     (mapClick)="openInfoWindow(marker, location)"></map-marker>
         <map-info-window>{{infoContent}}</map-info-window>
       </google-map>

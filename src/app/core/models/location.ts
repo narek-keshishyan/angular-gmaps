@@ -1,5 +1,13 @@
 export interface Location {
-  id: string;
+  id: number;
+  lat: number;
+  lng: number;
   name: string;
-  coordinates: number[];
+}
+
+export interface LocationResponse {
+  results: Location[];
+  currentPage: number;
+  totalPages: number;
+  length: number;
 }

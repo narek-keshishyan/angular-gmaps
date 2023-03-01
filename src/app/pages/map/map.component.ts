@@ -1,35 +1,43 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { HttpClient } from '@angular/common/http';
 import { LocationsStore } from '../../shared/services/locations.store';
+import { Location, LocationResponse } from '../../core/models/location';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapComponent implements OnInit {
-  apiLoaded: Observable<boolean>;
-  @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow | undefined;
+  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
+  public apiLoaded$: Observable<boolean>;
+  public locations$!: Observable<LocationResponse>;
 
   public infoContent = '';
   public showSidePanel = false;
   public showContent = false;
-  public selectedMarker: any;
-  public locations$!: Observable<any>;
+  public selectedMarker!: Location;
 
-  center: google.maps.LatLngLiteral = {lat: 24, lng: 12};
-  markerPositions: google.maps.LatLngLiteral[] = [];
-  zoom = 4;
+  public center: google.maps.LatLngLiteral = {lat: 32, lng: 35};
+  public zoom = 7;
 
-  addMarker(event: google.maps.MapMouseEvent) {
-    if (event.latLng !== null) {
-      this.markerPositions.push(event.latLng.toJSON());
-    }
+  constructor(httpClient: HttpClient, private locationsStore: LocationsStore) {
+    this.apiLoaded$ = httpClient
+      .jsonp('https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY', 'callback')
+      .pipe(
+        map(() => true),
+        catchError(() => of(false)),
+      );
   }
 
-  openInfoWindow(marker: MapMarker, location: any) {
+  ngOnInit() {
+    this.locations$ = this.locationsStore.loadAllLocations();
+  }
+
+  public openInfoWindow(marker: MapMarker, location: Location): void {
     if (this.infoWindow !== undefined) {
       this.infoContent = location.name;
       this.selectedMarker = location;
@@ -38,52 +46,12 @@ export class MapComponent implements OnInit {
     }
   }
 
-  constructor(httpClient: HttpClient, private locationsStore: LocationsStore) {
-    this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY', 'callback')
-      .pipe(
-        map(() => true),
-        catchError(() => of(false)),
-      );
-  }
-
-  toggleSidePanel() {
+  public toggleSidePanel(): void {
     this.showSidePanel = !this.showSidePanel;
     this.showContent = false;
   }
 
-  onTransitionEnd() {
-    if (this.showSidePanel) {
-      this.showContent = true;
-    } else {
-      this.showContent = false;
-    }
+  public onTransitionEnd(): void {
+    this.showContent = this.showSidePanel;
   }
-
-  ngOnInit() {
-    this.locations$ = this.locationsStore.locations$;
-
-    this.markerPositions = [
-      {
-        lat:  35.00524,
-        lng: 32.06384
-      },
-      {
-        lat:  35.10524,
-        lng: 32.16384
-      },
-      {
-        lat:  35.56524,
-        lng: 32.45638
-      },
-      {
-        lat:  35.46524,
-        lng: 32.15638
-      },
-      {
-        lat:  35.16524,
-        lng: 33.45638
-      }
-    ];
-  }
-
 }

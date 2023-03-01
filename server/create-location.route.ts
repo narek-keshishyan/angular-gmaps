@@ -27,5 +27,5 @@ export function createLocation(req: Request, res: Response) {
 
     res.status(200).json(location);
 
-  }, 2000);
+  }, 500);
 }

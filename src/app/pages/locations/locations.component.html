@@ -1,1 +1,52 @@
-<p>locations works!</p>
+<mat-toolbar>
+  <mat-toolbar-row class="mat-toolbar-row-right">
+    <button mat-raised-button color="primary" (click)="openAddModal()">Add Location</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<table mat-table [dataSource]="(locationsByParams$ | async)?.results" matSort (matSortChange)="sortData($event)">
+  <ng-container matColumnDef="index">
+    <mat-header-cell *matHeaderCellDef>Index</mat-header-cell>
+    <mat-cell *matCellDef="let i=index">{{ i + 1 }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="lat">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Lat</mat-header-cell>
+    <mat-cell *matCellDef="let location">{{ location.lat }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="lng">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Lng</mat-header-cell>
+    <mat-cell *matCellDef="let location">{{ location.lng }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+    <mat-cell *matCellDef="let location">{{ location.name }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="edit">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let location">
+      <button mat-icon-button (click)="openEditModal(location)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="['index', 'lat', 'lng', 'name', 'edit']"></mat-header-row>
+  <mat-row *matRowDef="let location; columns: ['index', 'lat', 'lng', 'name', 'edit']; let i=index"></mat-row>
+</table>
+
+<mat-paginator #paginator
+               class="demo-paginator"
+               (page)="handlePageEvent($event)"
+               [length]="(locationsByParams$ | async)?.length"
+               [pageSize]="pageSize"
+               [disabled]="disabled"
+               [showFirstLastButtons]="showFirstLastButtons"
+               [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+               [hidePageSize]="hidePageSize"
+               [pageIndex]="pageIndex"
+               aria-label="Select page">
+</mat-paginator>
