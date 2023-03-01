@@ -2,8 +2,8 @@
   <div class="side-panel" [style.width]="showSidePanel ? '30%' : '0%'" (click)="toggleSidePanel()" (transitionend)="onTransitionEnd()">
     <div class="side-panel-content" *ngIf="showContent">
       <h2>{{selectedMarker.name}}</h2>
-      <p>Latitude: {{selectedMarker.lat}}</p>
-      <p>Longitude: {{selectedMarker.lng}}</p>
+      <p>{{ 'PLACEHOLDER.LATITUDE' | translate }}: {{selectedMarker.lat}}</p>
+      <p>{{ 'PLACEHOLDER.LONGITUDE' | translate }}: {{selectedMarker.lng}}</p>
     </div>
   </div>
   <button class="toggle-button" (click)="toggleSidePanel()">

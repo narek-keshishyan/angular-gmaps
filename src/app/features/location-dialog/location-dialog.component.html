@@ -6,36 +6,36 @@
 <mat-dialog-content [formGroup]="form">
   <mat-form-field>
     <input matInput
-           placeholder="Location Name"
+           placeholder="{{ 'PLACEHOLDER.LOCATION_NAME' | translate }}"
            formControlName="name"
            required>
-    <mat-error *ngIf="name?.invalid">Name is required!</mat-error>
+    <mat-error *ngIf="name?.invalid">{{ 'VALIDATION.NAME_IS_REQUIRED' | translate }}</mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <input matInput
-           placeholder="Latitude"
+           placeholder="{{ 'PLACEHOLDER.LATITUDE' | translate }}"
            formControlName="lat"
            required>
-    <mat-error *ngIf="lat?.invalid">Latitude is invalid!</mat-error>
+    <mat-error *ngIf="lat?.invalid">{{ 'VALIDATION.LATITUDE_IS_INVALID' | translate }}</mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <input matInput
-           placeholder="Longitude"
+           placeholder="{{ 'PLACEHOLDER.LONGITUDE' | translate }}"
            formControlName="lng"
            required>
-    <mat-error *ngIf="lng?.invalid">longitude is invalid!</mat-error>
+    <mat-error *ngIf="lng?.invalid">{{ 'VALIDATION.LONGITUDE_IS_INVALID' | translate }}</mat-error>
   </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <button mat-raised-button
           (click)="close()">
-    Close
+    {{ 'BUTTON.CLOSE' | translate }}
   </button>
   <button mat-raised-button color="primary" #saveButton (click)="save()" [disabled]="!form.valid">
-    Save
+    {{ 'BUTTON.SAVE' | translate }}
   </button>
 </mat-dialog-actions>
 

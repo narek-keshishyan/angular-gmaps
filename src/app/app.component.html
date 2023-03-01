@@ -1,8 +1,15 @@
 <mat-toolbar color="primary">
-  <span>LocationApp</span>
+  <span>{{ 'LOCATIONS_APP' | translate }}</span>
+  <a mat-button routerLink="/">{{ 'NAVIGATION.MAP' | translate }}</a>
+  <a mat-button routerLink="/locations">{{ 'NAVIGATION.LOCATIONS' | translate }}</a>
+
   <span class="spacer"></span>
-  <a mat-button routerLink="/">Map</a>
-  <a mat-button routerLink="/locations">Locations</a>
+
+  <button mat-button [matMenuTriggerFor]="menu"><mat-icon>language</mat-icon>{{ selectedLanguage }}</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="setLanguage('en')">English</button>
+    <button mat-menu-item (click)="setLanguage('gr')">Greek</button>
+  </mat-menu>
 </mat-toolbar>
 
 <messages></messages>

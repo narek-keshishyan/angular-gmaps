@@ -1,0 +1,29 @@
+{
+  "LOCATIONS_APP": "LocationApp",
+  "NAVIGATION": {
+    "MAP": "Map",
+    "LOCATIONS": "Locations"
+  },
+  "LOCATIONS_TABLE": {
+    "INDEX": "index",
+    "LAT": "Lat",
+    "LNG": "Lng",
+    "NAME": "Name",
+    "ITEMS_PER_PAGE": "Items per page"
+  },
+  "BUTTON": {
+    "ADD_LOCATION": "Add Location",
+    "CLOSE": "Close",
+    "SAVE": "Save"
+  },
+  "VALIDATION": {
+    "NAME_IS_REQUIRED": "Name is required!",
+    "LATITUDE_IS_INVALID": "Latitude is invalid!",
+    "LONGITUDE_IS_INVALID": "Longitude is invalid!"
+  },
+  "PLACEHOLDER": {
+    "LOCATION_NAME": "Location Name",
+    "LATITUDE": "Latitude",
+    "LONGITUDE": "Longitude"
+  }
+}

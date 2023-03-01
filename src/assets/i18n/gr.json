@@ -1,0 +1,30 @@
+{
+  "LOCATIONS_APP": "Εφαρμογή τοποθεσίας",
+  "NAVIGATION": {
+    "MAP": "Χάρτης",
+    "LOCATIONS": "Τοποθεσίες"
+  },
+  "LOCATIONS_TABLE": {
+    "INDEX": "Δείκτης",
+    "LAT": "Lat",
+    "LNG": "Lng",
+    "NAME": "Ονομα",
+    "ITEMS_PER_PAGE": "αντικείμενα ανά σελίδα"
+  },
+  "BUTTON": {
+    "ADD_LOCATION": "Προσθήκη τοποθεσίας",
+    "CLOSE": "Κλείσε",
+    "SAVE": "Αποθηκεύσετε"
+  },
+  "VALIDATION": {
+    "NAME_IS_REQUIRED": "Το όνομα είναι υποχρεωτικό!",
+    "LATITUDE_IS_INVALID": "Το γεωγραφικό πλάτος δεν είναι έγκυρο!",
+    "LONGITUDE_IS_INVALID": "Το γεωγραφικό μήκος δεν είναι έγκυρο!"
+  },
+  "PLACEHOLDER": {
+    "LOCATION_NAME": "Ονομα τοποθεσίας",
+    "LATITUDE": "Γεωγραφικό πλάτος",
+    "LONGITUDE": "Γεωγραφικό μήκος"
+  }
+}
+
