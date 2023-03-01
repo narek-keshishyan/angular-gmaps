@@ -49,7 +49,6 @@ export class LocationDialogComponent {
   save() {
     if (this.form.valid) {
       const changes = {...this.form.value, lat: Number(this.form.value.lat), lng: Number(this.form.value.lng)};
-      console.log('changes', changes);
       if (this.location) {
         this.locationsStore.updateLocation(this.location.id, changes)
           .subscribe();

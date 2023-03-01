@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { LoadingService } from './shared/loading/loading.service';
@@ -31,6 +31,8 @@ import { LocationsComponent } from './pages/locations/locations.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationDialogComponent } from './features/location-dialog/location-dialog.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,15 @@ import { LocationDialogComponent } from './features/location-dialog/location-dia
     MatSelectModule,
     MatDatepickerModule,
     MatTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     LoadingService,
@@ -76,3 +86,8 @@ import { LocationDialogComponent } from './features/location-dialog/location-dia
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}

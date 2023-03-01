@@ -1,27 +1,27 @@
 <mat-toolbar>
   <mat-toolbar-row class="mat-toolbar-row-right">
-    <button mat-raised-button color="primary" (click)="openAddModal()">Add Location</button>
+    <button mat-raised-button color="primary" (click)="openAddModal()">{{ 'BUTTON.ADD_LOCATION' | translate }}</button>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <table mat-table [dataSource]="(locationsByParams$ | async)?.results" matSort (matSortChange)="sortData($event)">
   <ng-container matColumnDef="index">
-    <mat-header-cell *matHeaderCellDef>Index</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>{{ 'LOCATIONS_TABLE.INDEX' | translate }}</mat-header-cell>
     <mat-cell *matCellDef="let i=index">{{ i + 1 }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="lat">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Lat</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'LOCATIONS_TABLE.LAT' | translate }}</mat-header-cell>
     <mat-cell *matCellDef="let location">{{ location.lat }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="lng">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Lng</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'LOCATIONS_TABLE.LNG' | translate }}</mat-header-cell>
     <mat-cell *matCellDef="let location">{{ location.lng }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'LOCATIONS_TABLE.NAME' | translate }}</mat-header-cell>
     <mat-cell *matCellDef="let location">{{ location.name }}</mat-cell>
   </ng-container>
 
