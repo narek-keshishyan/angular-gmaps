@@ -16,28 +16,40 @@ import { MessagesService } from '../../shared/messages/messages.service';
     ]
 })
 export class LocationDialogComponent {
+  public form: FormGroup;
+  public location: Location | null;
 
-    form: FormGroup;
-
-    location: Location | null;
-
-    constructor(
-        private fb: FormBuilder,
-        private dialogRef: MatDialogRef<LocationDialogComponent>,
-        private locationsStore: LocationsStore,
-        @Inject(MAT_DIALOG_DATA) location: Location,
-    ) {
-        this.location = location;
+  constructor(
+      private fb: FormBuilder,
+      private dialogRef: MatDialogRef<LocationDialogComponent>,
+      private locationsStore: LocationsStore,
+      @Inject(MAT_DIALOG_DATA) location: Location,
+  ) {
+      this.location = location;
 
       this.form = fb.group({
         name: [location?.name ? location.name : '', Validators.required],
-        lat: [location?.lat ? location.lat : '', Validators.required],
-        lng: [location?.lng ? location.lng : '', Validators.required],
+        lat: [location?.lat ? location.lat : '', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d+)?$')]],
+        lng: [location?.lng ? location.lng : '', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d+)?$')]],
       });
-    }
+  }
 
-    save() {
-      const changes = this.form.value;
+  get name() {
+    return this.form.get('name');
+  }
+
+  get lat() {
+    return this.form.get('lat');
+  }
+
+  get lng() {
+    return this.form.get('lng');
+  }
+
+  save() {
+    if (this.form.valid) {
+      const changes = {...this.form.value, lat: Number(this.form.value.lat), lng: Number(this.form.value.lng)};
+      console.log('changes', changes);
       if (this.location) {
         this.locationsStore.updateLocation(this.location.id, changes)
           .subscribe();
@@ -47,9 +59,9 @@ export class LocationDialogComponent {
       }
       this.dialogRef.close(changes);
     }
+  }
 
-    close() {
-        this.dialogRef.close();
-    }
-
+  close() {
+      this.dialogRef.close();
+  }
 }

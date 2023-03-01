@@ -40,6 +40,6 @@ export function updateLocation(req: Request, res: Response) {
 
     res.status(200).json(newLocation);
 
-  }, 2000);
+  }, 500);
 
 }

@@ -36,7 +36,7 @@ export class LocationsComponent implements OnInit {
   }
 
   public sortData(sort: Sort): void {
-    this.locationsByParams$ = this.locationsStore.customTst(this.pageIndex+1, this.pageSize, sort.active, sort.direction);
+    this.locationsByParams$ = this.locationsStore.loadLocationsByParams(this.pageIndex+1, this.pageSize, sort.active, sort.direction);
   }
 
   public handlePageEvent(e: PageEvent): void {
@@ -44,8 +44,7 @@ export class LocationsComponent implements OnInit {
     this.length = e.length;
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-
-    this.locationsByParams$ = this.locationsStore.customTst(this.pageIndex+1, this.pageSize);
+    this.locationsByParams$ = this.locationsStore.loadLocationsByParams(this.pageIndex+1, this.pageSize);
   }
 
   public openAddModal(): void {

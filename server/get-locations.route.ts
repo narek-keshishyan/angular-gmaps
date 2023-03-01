@@ -1,22 +1,13 @@
 import {Request, Response} from 'express';
 import { LOCATIONS } from "./db-data";
 
-
-
-export function getAllLocations(req: Request, res: Response) {
+export function getLocationsByParams(req: Request, res: Response) {
   /*
       console.log("ERROR loading locations!");
       res.status(500).json({message: 'error occurred.'});
       return;
   */
-  setTimeout(() => {
 
-       res.status(200).json(LOCATIONS);
-
-  }, 1500);
-}
-
-export function getLocationsByParams(req: Request, res: Response) {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
   const startIndex = (page - 1) * limit;
@@ -54,7 +45,7 @@ export function getLocationsByParams(req: Request, res: Response) {
       totalPages,
       length
     });
-  }, 1500);
+  }, 500);
 }
 
 

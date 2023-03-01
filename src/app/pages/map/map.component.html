@@ -1,17 +1,17 @@
 <div class="container">
   <div class="side-panel" [style.width]="showSidePanel ? '30%' : '0%'" (click)="toggleSidePanel()" (transitionend)="onTransitionEnd()">
-    <ng-container *ngIf="showContent">
+    <div class="side-panel-content" *ngIf="showContent">
       <h2>{{selectedMarker.name}}</h2>
       <p>Latitude: {{selectedMarker.lat}}</p>
       <p>Longitude: {{selectedMarker.lng}}</p>
-    </ng-container>
+    </div>
   </div>
   <button class="toggle-button" (click)="toggleSidePanel()">
-    {{showSidePanel ? '<' : '>'}}
+    <mat-icon>{{ showSidePanel ? 'chevron_left' : 'chevron_right' }}</mat-icon>
   </button>
   <div class="map-container">
     <div *ngIf="apiLoaded$ | async">
-      <google-map height="100vh"
+      <google-map height="95vh"
                   width="100%"
                   [center]="center"
                   [zoom]="zoom">

@@ -1,22 +1,23 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {catchError, map, shareReplay, tap} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
-import {LoadingService} from '../loading/loading.service';
-import {MessagesService} from '../messages/messages.service';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { LoadingService } from '../loading/loading.service';
+import { MessagesService } from '../messages/messages.service';
 import { Location, LocationResponse } from '../../core/models/location';
+import { LIMIT, PAGE } from '../../core/constants/pagination';
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class LocationsStore {
-    private subject = new BehaviorSubject<LocationResponse>({
-      results: [],
-      currentPage: 0,
-      totalPages: 0,
-      length: 0
-    });
+  private subject = new BehaviorSubject<LocationResponse>({
+    results: [],
+    currentPage: 0,
+    totalPages: 0,
+    length: 0
+  });
   private subjectByParams = new BehaviorSubject<LocationResponse>({
     results: [],
     currentPage: 0,
@@ -24,39 +25,17 @@ export class LocationsStore {
     length: 0
   });
 
-    locations$ : Observable<LocationResponse> = this.subjectByParams.asObservable();
+  locations$: Observable<LocationResponse> = this.subjectByParams.asObservable();
 
-    constructor(
-        private http:HttpClient,
-        private loading: LoadingService,
-        private messages: MessagesService) {
-          this.loadLocationsByParams(1,10);
-    }
+  constructor(
+    private http: HttpClient,
+    private loading: LoadingService,
+    private messages: MessagesService) {
+    this.loadLocationsByParams(PAGE, LIMIT).subscribe();
+  }
 
-    public loadAllLocations(): Observable<LocationResponse> {
-        const loadLocations$ = this.http.get<LocationResponse>('/api/locations')
-            .pipe(
-                catchError(err => {
-                    const message = "Could not load locations";
-                    this.messages.showErrors(message);
-                    console.log(message, err);
-                    return throwError(err);
-                }),
-                tap(locations => this.subject.next(locations)),
-                shareReplay()
-            );
-
-        return this.loading.showLoaderUntilCompleted(loadLocations$);
-
-    }
-
-  public loadLocationsByParams(page: number, limit: number): void {
-    const locationsByParams$ = this.http.get<LocationResponse>('/api/locations', {
-      params: {
-        page,
-        limit
-      }
-    })
+  public loadAllLocations(): Observable<LocationResponse> {
+    const loadLocations$ = this.http.get<LocationResponse>('/api/locations')
       .pipe(
         catchError(err => {
           const message = "Could not load locations";
@@ -64,23 +43,24 @@ export class LocationsStore {
           console.log(message, err);
           return throwError(err);
         }),
-        tap(locations => this.subjectByParams.next(locations)),
+        tap(locations => this.subject.next(locations)),
         shareReplay()
       );
 
-    this.loading.showLoaderUntilCompleted(locationsByParams$).subscribe();
+    return this.loading.showLoaderUntilCompleted(loadLocations$);
 
   }
 
-  public customTst(page: number, limit: number, sortBy = 'id', orderBy = 'asc'): Observable<LocationResponse> {
-    const locationsByParams$ = this.http.get<LocationResponse>('/api/locations', {
-      params: {
-        page,
-        limit,
-        sort_by: sortBy,
-        order_by: orderBy
-      }
-    })
+  public loadLocationsByParams(page?: number, limit?: number, sortBy = 'name', orderBy = 'asc'): Observable<LocationResponse> {
+    const params: { [key: string]: any } = {sort_by: sortBy, order_by: orderBy};
+    if (page !== undefined) {
+      params['page'] = page;
+    }
+    if (limit !== undefined) {
+      params['limit'] = limit;
+    }
+
+    const locationsByParams$ = this.http.get<LocationResponse>('/api/locations', {params})
       .pipe(
         catchError(err => {
           const message = "Could not load locations";
@@ -93,34 +73,38 @@ export class LocationsStore {
       );
 
     return this.loading.showLoaderUntilCompleted(locationsByParams$);
-
   }
 
   updateLocation(locationId: number, changes: Partial<Location>): Observable<Location> {
-      const locations = this.subjectByParams.getValue();
+    const locations = this.subjectByParams.getValue();
 
-      const index = locations.results.findIndex(location => location.id === locationId);
+    const index = locations.results.findIndex(location => location.id === locationId);
 
-      const newLocation: Location = {
-        ...locations.results[index],
-        ...changes
-      };
+    const newLocation: Location = {
+      ...locations.results[index],
+      ...changes
+    };
 
-      const newLocations: Location[] = locations.results.slice(0);
-      newLocations[index] = newLocation;
+    const newLocations: Location[] = locations.results.slice(0);
+    newLocations[index] = newLocation;
 
-      this.subjectByParams.next({currentPage: locations.currentPage, totalPages: locations.totalPages, length: locations.length, results: newLocations});
+    this.subjectByParams.next({
+      currentPage: locations.currentPage,
+      totalPages: locations.totalPages,
+      length: locations.length,
+      results: newLocations
+    });
 
-      return this.http.put<Location>(`/api/locations/${locationId}`, changes)
-          .pipe(
-              catchError(err => {
-                  const message = "Could not save location";
-                  console.log(message, err);
-                  this.messages.showErrors(message);
-                  return throwError(err);
-              }),
-              shareReplay()
-          );
+    return this.http.put<Location>(`/api/locations/${locationId}`, changes)
+      .pipe(
+        catchError(err => {
+          const message = "Could not save location";
+          console.log(message, err);
+          this.messages.showErrors(message);
+          return throwError(err);
+        }),
+        shareReplay()
+      );
   }
 
   createLocation(location: Location): Observable<Location> {
@@ -130,9 +114,12 @@ export class LocationsStore {
       ...location
     };
 
-    const newLocations: Location[] = [...locations.results, newLocation];
-
-    this.subjectByParams.next({currentPage: locations.currentPage, totalPages: locations.totalPages, length: locations.length+1, results: locations.results});
+    this.subjectByParams.next({
+      currentPage: locations.currentPage,
+      totalPages: locations.totalPages,
+      length: locations.length + 1,
+      results: locations.results
+    });
 
     return this.http.post<Location>('/api/locations', newLocation)
       .pipe(
@@ -142,7 +129,6 @@ export class LocationsStore {
           this.messages.showErrors(message);
           return throwError(err);
         }),
-        shareReplay()
       );
   }
 }

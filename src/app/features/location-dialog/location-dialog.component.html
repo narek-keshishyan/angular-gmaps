@@ -1,48 +1,42 @@
 <h2 mat-dialog-title>{{location?.name}}</h2>
 
 <loading></loading>
-
 <messages></messages>
 
 <mat-dialog-content [formGroup]="form">
-
   <mat-form-field>
-
     <input matInput
            placeholder="Location Name"
-           formControlName="name">
-
+           formControlName="name"
+           required>
+    <mat-error *ngIf="name?.invalid">Name is required!</mat-error>
   </mat-form-field>
 
   <mat-form-field>
-
     <input matInput
            placeholder="Latitude"
-           formControlName="lat">
-
+           formControlName="lat"
+           required>
+    <mat-error *ngIf="lat?.invalid">Latitude is invalid!</mat-error>
   </mat-form-field>
 
   <mat-form-field>
-
     <input matInput
            placeholder="Longitude"
-           formControlName="lng">
-
+           formControlName="lng"
+           required>
+    <mat-error *ngIf="lng?.invalid">longitude is invalid!</mat-error>
   </mat-form-field>
-
 </mat-dialog-content>
 
 <mat-dialog-actions>
-
   <button mat-raised-button
           (click)="close()">
     Close
   </button>
-
-  <button mat-raised-button color="primary" #saveButton (click)="save()">
+  <button mat-raised-button color="primary" #saveButton (click)="save()" [disabled]="!form.valid">
     Save
   </button>
-
 </mat-dialog-actions>
 
 
