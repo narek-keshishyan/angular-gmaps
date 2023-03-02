@@ -12,26 +12,23 @@ import { LIMIT, PAGE } from '../../core/constants/pagination';
   providedIn: 'root'
 })
 export class LocationsStore {
-  private subject = new BehaviorSubject<LocationResponse>({
+  private readonly defaultLocationResponse: LocationResponse = {
     results: [],
     currentPage: 0,
     totalPages: 0,
     length: 0
-  });
-  private subjectByParams = new BehaviorSubject<LocationResponse>({
-    results: [],
-    currentPage: 0,
-    totalPages: 0,
-    length: 0
-  });
+  };
 
-  locations$: Observable<LocationResponse> = this.subjectByParams.asObservable();
+  private readonly subject = new BehaviorSubject<LocationResponse>(this.defaultLocationResponse);
+  private readonly subjectByParams = new BehaviorSubject<LocationResponse>(this.defaultLocationResponse);
+
+  public locations$: Observable<LocationResponse> = this.subjectByParams.asObservable();
 
   constructor(
     private http: HttpClient,
     private loading: LoadingService,
     private messages: MessagesService) {
-    this.loadLocationsByParams(PAGE, LIMIT).subscribe();
+      this.loadLocationsByParams(PAGE, LIMIT).subscribe();
   }
 
   public loadAllLocations(): Observable<LocationResponse> {
