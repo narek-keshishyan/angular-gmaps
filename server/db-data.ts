@@ -1,3 +1,4 @@
+// Code can be used to be able to generate different amount of data
 // let locations = [
 //   {
 //     id: 1,
@@ -771,8 +772,3 @@ export const LOCATIONS: any = [
     "name": "location 124"
   }
 ];
-
-
-export function findLocationById(locationId: number) {
-  return LOCATIONS[locationId];
-}

@@ -14,3 +14,12 @@ main {
 .spacer {
   flex: 1 1 auto;
 }
+
+.logo-name {
+  margin-right: 30px;
+}
+
+mat-toolbar a.active {
+  background-color: #ffffff;
+  color: #d10f4a;
+}
