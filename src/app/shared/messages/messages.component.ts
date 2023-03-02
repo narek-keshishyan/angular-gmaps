@@ -9,30 +9,22 @@ import {MessagesService} from './messages.service';
   styleUrls: ['./messages.component.css']
 })
 export class MessagesComponent implements OnInit {
-
-  showMessages = false;
-
-  errors$!: Observable<string[]>;
+  public showMessages = false;
+  public errors$!: Observable<string[]>;
 
 
   constructor(public messagesService: MessagesService) {
-
-      console.log("Created messages component");
-
+    console.log("Created messages component");
   }
 
   ngOnInit() {
-      this.errors$ = this.messagesService.errors$
-          .pipe(
-              tap(() => this.showMessages = true)
-          );
-
+    this.errors$ = this.messagesService.errors$
+      .pipe(
+          tap(() => this.showMessages = true)
+      );
   }
-
 
   onClose() {
-      this.showMessages = false;
-
+    this.showMessages = false;
   }
-
 }
