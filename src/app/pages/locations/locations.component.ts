@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { LocationsStore } from '../../shared/services/locations.store';
 import { Location } from '../../core/models/location';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -14,20 +14,21 @@ import { Sort } from '@angular/material/sort';
   styleUrls: ['./locations.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LocationsComponent implements OnInit {
+export class LocationsComponent implements OnInit, OnDestroy {
   public locationsByParams$!: Observable<any>;
 
   public length = 30;
   public pageSize = 10;
   public pageIndex = 0;
   public pageSizeOptions = [10, 50, 100];
+  public pageEvent!: PageEvent;
 
   public hidePageSize = false;
   public showPageSizeOptions = true;
   public showFirstLastButtons = true;
   public disabled = false;
 
-  public pageEvent!: PageEvent;
+  private readonly destroy$: Subject<void> = new Subject();
 
   constructor(private locationsStore: LocationsStore, public dialog: MatDialog) {}
 
@@ -36,7 +37,11 @@ export class LocationsComponent implements OnInit {
   }
 
   public sortData(sort: Sort): void {
-    this.locationsByParams$ = this.locationsStore.loadLocationsByParams(this.pageIndex+1, this.pageSize, sort.active, sort.direction);
+    this.locationsStore.loadLocationsByParams(this.pageIndex+1, this.pageSize, sort.active, sort.direction)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   public handlePageEvent(e: PageEvent): void {
@@ -44,7 +49,11 @@ export class LocationsComponent implements OnInit {
     this.length = e.length;
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.locationsByParams$ = this.locationsStore.loadLocationsByParams(this.pageIndex+1, this.pageSize);
+    this.locationsStore.loadLocationsByParams(this.pageIndex+1, this.pageSize)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   public openAddModal(): void {
@@ -72,5 +81,10 @@ export class LocationsComponent implements OnInit {
     dialogConfig.width = "400px";
     dialogConfig.data = location || null;
     return dialogConfig;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
